@@ -1,0 +1,39 @@
+version: '3.9'
+services:
+  rpc-server:
+    container_name: rpc-server
+    build: rpc-server
+    ports:
+      - "8888:8888"
+    environment:
+      - SERVICE_NAME=rpc-server
+      - SERVICE_TAGS=rpc
+    depends_on:
+      - mySQL
+  http-server:
+    container_name: http-server
+    build: http-server
+    ports:
+      - "8080:8080"
+    environment:
+      - SERVICE_NAME=http-server
+      - SERVICE_TAGS=http
+    depends_on:
+      - mySQL
+  mySQL:
+    image: mysql:latest # use latest version of mysql
+    container_name: mysql_db # add a name for the container
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    environment: # add default values, see docs for more info.
+      MYSQL_USER: user
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_PASSWORD: 1234
+      MYSQL_DATABASE: testdb # create this database on startup
+    ports:
+      - '3307:3306'
+    volumes:
+      - ht-server:/var/lib/mysql
+
+volumes: # add persistent data even if container is removed.
+  ht-server:
