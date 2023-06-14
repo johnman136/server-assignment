@@ -30,7 +30,6 @@ func (s *IMServiceImpl) Send(ctx context.Context, req *rpc.SendRequest) (*rpc.Se
 
 	resp := rpc.NewSendResponse()
 	if req.Message == nil {
-		//err := fmt.Errorf("Invalid input sanxiao")
 		return resp, nil
 	}
 	Receiver := strings.TrimPrefix(req.Message.GetSender()+":", req.Message.GetChat())
